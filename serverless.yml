@@ -1,0 +1,28 @@
+service: serveless-face-rekognition
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: us-east-1
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - rekognition:CompareFaces
+            - rekognition:DetectFaces
+            - rekognition:ListFaces
+            - rekognition:SearchFaces
+            - s3:ListBucket
+            - s3:GetObject
+            - s3:PutObject
+          Resource: '*'
+
+functions:
+  compare-faces:
+    handler: index.handler
+    events:
+      - httpApi:
+          path: /
+          method: get
